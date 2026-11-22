@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PANZER+SHOP</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Oswald (Heading) & Sarabun (Paragraph) -->
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Sarabun:wght@300;400;600&family=Black+Ops+One&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #121212;
+      --bg-card: #FFFFFF;
+      --accent-yellow: #FFCC00;
+      --text-main: #FFFFFF;
+      --text-card: #000000;
+    }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Sarabun', sans-serif;
+    }
+    h1, h2, h3, h4, h5, h6, .navbar-brand, .btn, .badge, .title-font {
+      font-family: 'Oswald', sans-serif;
+    }
+
+    /* Header / Navbar */
+    .navbar { background-color: #000 !important; border-bottom: 1px solid #333; }
+    .navbar-brand { font-family: 'Black Ops One', cursive; font-size: 2rem; letter-spacing: 2px; color: #fff !important; text-shadow: 2px 2px 0 #000; }
+    .nav-link { color: #ccc !important; text-transform: uppercase; font-size: 0.9rem; margin-right: 15px; font-family: 'Oswald', sans-serif;}
+    .nav-link.active { color: var(--accent-yellow) !important; font-weight: bold; border-bottom: 2px solid var(--accent-yellow); }
+    .nav-link:hover { color: var(--accent-yellow) !important; }
+
+    .search-bar { background: #222; border: none; color: #fff; }
+    .search-bar:focus { background: #222; color: #fff; }
+    .search-bar::placeholder { color: #888; }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(to right, rgba(0,0,0,0.9), rgba(0,0,0,0.4)), url('hero.png') center/cover;
+      padding: 100px 0;
+      border-bottom: 2px solid var(--accent-yellow);
+    }
+    .hero-title { font-size: 4.5rem; font-weight: 700; line-height: 1; }
+    @media (max-width: 576px) { .hero-title { font-size: 3rem; } .hero-section { padding: 60px 0; } }
+    .text-yellow { color: var(--accent-yellow); }
+    .btn-yellow { background-color: var(--accent-yellow); color: #000; font-weight: bold; border: none; }
+    .btn-yellow:hover { background-color: #e6b800; color: #000; }
+    .btn-yellow:disabled { background-color: #777; color: #ddd; }
+
+    /* Category Icons */
+    .cat-box {
+      border: 1px solid #333;
+      padding: 20px 10px;
+      text-align: center;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .cat-box:hover, .cat-box.active { border-color: var(--accent-yellow); color: var(--accent-yellow); }
+    .cat-icon { font-size: 2rem; color: var(--accent-yellow); margin-bottom: 10px; }
+
+    /* Card UI */
+    .card {
+      background-color: var(--bg-card);
+      color: var(--text-card);
+      border: none;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(255,204,0,0.2); }
+    .card-img-top { height: 200px; object-fit: contain; padding: 10px; background-color: white;}
+    .badge-status { position: absolute; top: 10px; left: 10px; font-size: 0.8rem; }
+    .price { font-weight: 600; font-size: 1.2rem; }
+
+    /* Utilities */
+    .rounded { border-radius: 8px !important; }
+    footer { border-top: 1px solid #333; font-size: 0.9rem; }
+    .admin-link { color: #333; text-decoration: none; cursor: pointer; }
+    .admin-link:hover { color: var(--accent-yellow); }
+
+    /* Admin UI */
+    #backend-section { background-color: #1a1a1a; min-height: 100vh; padding-top: 20px; }
+    .admin-table { color: white; }
+    /* Category image tiles */
+    .cat-tile { cursor: pointer; border-radius: 8px; overflow: hidden; }
+    .cat-tile img { width: 100%; display: block; transition: transform 0.2s, filter 0.2s; }
+    .cat-tile:hover img, .cat-tile.active img { transform: translateY(-3px); filter: drop-shadow(0 0 8px rgba(255,204,0,0.7)); }
+    /* Product card: Style A - Modern Military */
+    .pcard {
+      position: relative;
+      background: #151518;
+      border: 1px solid #2a2a2e;
+      border-radius: 6px;
+      overflow: hidden;
+      color: #fff;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .pcard::before {
+      content: '';
+      position: absolute;
+      z-index: 4;
+      pointer-events: none;
+    }
+    .pcard::before { top: 0; left: 0; width: 26px; height: 26px; border-top: 3px solid var(--accent-yellow); border-left: 3px solid var(--accent-yellow); }
+    .pcard:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(255,204,0,0.18); }
+
+    .pcard-img { position: relative; height: 210px; background: #000; overflow: hidden; }
+    .pcard-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pcard-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0) 55%); }
+
+    .pcard-status {
+      position: absolute; top: 10px; left: 10px; z-index: 3;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(0,0,0,0.7); border-radius: 20px; padding: 4px 10px;
+      font-size: 0.75rem; color: #fff;
+    }
+    .pcard-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+    .pcard-brand {
+      position: absolute; top: 10px; right: 10px; z-index: 3;
+      background: rgba(0,0,0,0.7); border: 1px solid rgba(255,204,0,0.5);
+      padding: 4px 10px; font-family: 'Oswald', sans-serif; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    .pcard-body { position: relative; padding: 14px 14px 58px; }
+    .pcard-scale { font-size: 0.8rem; color: #aaa; }
+    .pcard-name {
+      font-family: 'Oswald', sans-serif; font-size: 1.05rem; font-weight: 600;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px;
+    }
+    .pcard-price { color: var(--accent-yellow); font-weight: 700; font-size: 1.15rem; margin-top: 4px; }
+
+    .pcard-cart {
+      position: absolute; right: 0; bottom: 0;
+      background: var(--accent-yellow); color: #000; border: none;
+      padding: 12px 18px 12px 30px; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 0.95rem;
+      clip-path: polygon(16px 0, 100% 0, 100% 100%, 0 100%);
+      cursor: pointer;
+    }
+    .pcard-cart:hover { background: #e6b800; }
+    .pcard-cart:disabled { background: #555; color: #bbb; cursor: not-allowed; }
+    /* Navbar sizing */
+    .navbar { min-height: 96px; }
+    .navbar .nav-link { font-size: 1.2rem; margin-right: 28px; padding: 8px 0 !important; }
+    .navbar .search-bar { width: 300px; font-size: 1.05rem; padding: 10px 16px; }
+    .navbar .fa-user, .navbar .fa-shopping-cart { font-size: 1.5rem !important; }
+
+    /* Shop logo in the navbar (top-left) */
+    .navbar-logo { height: 64px; width: auto; display: block; }
+    @media (max-width: 576px) { .navbar-logo { height: 48px; } }
+  </style>
+</head>
+<body>
+
+  <!-- ================= FRONTEND ================= -->
+  <div id="frontend-section">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark py-3">
+      <div class="container">
+        <a class="navbar-brand p-0" href="#"><img src="logo.png" alt="PANZER SHOP" class="navbar-logo"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-4 me-auto">
+            <li class="nav-link active">Home</li>
+            <li class="nav-link">Categories <i class="fas fa-caret-down"></i></li>
+            <li class="nav-link">New Arrivals</li>
+            <li class="nav-link">Best Sellers</li>
+            <li class="nav-link">Special Offer</li>
+            <li class="nav-link">About Us</li>
+          </ul>
+
+          <div class="d-flex align-items-center gap-3">
+            <input type="text" id="searchInput" class="form-control search-bar rounded" placeholder="Search for model kits..." oninput="filterProducts()">
+            <i class="fas fa-user text-white" style="cursor:pointer; font-size:1.2rem;" onclick="showLoginModal()" title="Admin Login"></i>
+            <i class="fas fa-shopping-cart text-white" style="cursor:pointer; font-size:1.2rem;"></i>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+
+    <section class="hero-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h1 class="hero-title">BUILD<br>YOUR <span class="text-yellow">LEGEND</span></h1>
+            <p class="mt-3 fs-5">Scale Models<br>Tanks • Aircraft • Warships<br>Cars • Figure • Robot</p>
+            <button class="btn btn-yellow rounded px-4 py-2 mt-3 fs-5" onclick="document.getElementById('productGrid').scrollIntoView({behavior:'smooth'})">SHOP NOW <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories (User) -->
+    <div class="container mt-4">
+      <div class="row g-3">
+        <div class="col"><div class="cat-tile" data-cat="Tanks" onclick="setFilterCategory('Tanks')"><img src="cat-tanks.png" alt="Tanks"></div></div>
+        <div class="col"><div class="cat-tile" data-cat="Aircraft" onclick="setFilterCategory('Aircraft')"><img src="cat-aircraft.png" alt="Aircraft"></div></div>
+        <div class="col"><div class="cat-tile" data-cat="Warships" onclick="setFilterCategory('Warships')"><img src="cat-warships.png" alt="Warships"></div></div>
+        <div class="col"><div class="cat-tile" data-cat="Cars" onclick="setFilterCategory('Cars')"><img src="cat-cars.png" alt="Cars"></div></div>
+        <div class="col"><div class="cat-tile" data-cat="Figure" onclick="setFilterCategory('Figure')"><img src="cat-figure.png" alt="Figure"></div></div>
+        <div class="col"><div class="cat-tile" data-cat="Robot" onclick="setFilterCategory('Robot')"><img src="cat-robot.png" alt="Robot"></div></div>
+        <div class="col"><div class="cat-tile" data-cat="Others" onclick="setFilterCategory('Others')"><img src="cat-others.png" alt="Others"></div></div>
+        
+      </div>
+    </div>
+
+    <!-- Main Content & Filters -->
+    <div class="container mt-5">
+      <div class="d-flex flex-wrap gap-2 justify-content-between align-items-end mb-4">
+        <h3 class="mb-0">FEATURED PRODUCTS</h3>
+        <div class="d-flex gap-2">
+          <select id="filterBrand" class="form-select bg-dark text-white border-secondary rounded" onchange="filterProducts()">
+            <option value="">All Brands</option>
+            <option value="ICM">ICM</option>
+            <option value="Tamiya">Tamiya</option>
+            <option value="Revell">Revell</option>
+            <option value="Border">Border</option>
+            <option value="Others">Others</option>
+          </select>
+          <select id="filterScale" class="form-select bg-dark text-white border-secondary rounded" onchange="filterProducts()">
+            <option value="">All Scales</option>
+            <option value="1/24">1/24</option>
+                  <option value="1/35">1/35</option>
+            <option value="1/48">1/48</option>
+            <option value="1/72">1/72</option>
+            <option value="1/350">1/350</option>
+            <option value="1/700">1/700</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4" id="productGrid">
+        <div class="col-12 text-center py-5"><div class="spinner-border text-warning" role="status"></div><br>Loading Models...</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 py-4 text-center">
+      <p class="mb-0">Copyright &copy; 2026 PANZER+SHOP. All rights reserved. <span class="admin-link ms-2" onclick="showLoginModal()">[Admin]</span></p>
+    </footer>
+  </div>
+
+  <!-- ================= ADMIN LOGIN MODAL ================= -->
+  <div class="modal fade" id="loginModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header border-secondary">
+          <h5 class="modal-title text-yellow title-font">Admin Login</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <form class="modal-body" onsubmit="event.preventDefault(); login();">
+          <input type="text" id="adminUser" class="form-control mb-3" placeholder="Username" autocomplete="username">
+          <input type="password" id="adminPass" class="form-control mb-3" placeholder="Password" autocomplete="current-password">
+          <button type="submit" class="btn btn-yellow w-100 rounded" id="btnLogin">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= BACKEND (ADMIN DASHBOARD) ================= -->
+  <div id="backend-section" style="display: none;">
+    <nav class="navbar navbar-dark bg-black py-2 mb-4">
+      <div class="container">
+        <span class="navbar-brand text-yellow"><i class="fas fa-cogs"></i> PANZER+SHOP Admin Panel</span>
+        <button class="btn btn-outline-light btn-sm" onclick="logout()">Logout</button>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row g-3">
+        <!-- Add Product Form -->
+        <div class="col-md-4">
+          <div class="card bg-dark text-white border-secondary p-3">
+            <h4 class="text-yellow title-font mb-3">Add New Product</h4>
+            <form id="productForm" onsubmit="event.preventDefault(); submitProduct();">
+              <div class="mb-2">
+                <label>Product Name</label>
+                <input type="text" id="pName" class="form-control" required maxlength="150">
+              </div>
+              <div class="mb-2">
+                <label>Category</label>
+                <select id="pCategory" class="form-select" required>
+                  <option value="Tanks">Tanks</option>
+                  <option value="Aircraft">Aircraft</option>
+                  <option value="Warships">Warships</option>
+                  <option value="Cars">Cars</option>
+                  <option value="Figure">Figure</option>
+                  <option value="Robot">Robot</option>
+                  <option value="Others">Others</option>
+                </select>
+              </div>
+              <div class="mb-2">
+                <label>Scale</label>
+                <select id="pScale" class="form-select" required>
+                  <option value="1/24">1/24</option>
+                  <option value="1/35">1/35</option>
+                  <option value="1/48">1/48</option>
+                  <option value="1/72">1/72</option>
+                  <option value="1/350">1/350</option>
+                  <option value="1/700">1/700</option>
+                </select>
+              </div>
+              <div class="mb-2">
+                <label>Brand</label>
+                <select id="pBrand" class="form-select" required>
+                  <option value="ICM">ICM</option>
+                  <option value="Tamiya">Tamiya</option>
+                  <option value="Revell">Revell</option>
+                  <option value="Border">Border</option>
+                  <option value="Others">Others</option>
+                </select>
+              </div>
+              <div class="mb-2">
+                <label>Price (฿)</label>
+                <input type="number" id="pPrice" class="form-control" required min="0" step="any">
+              </div>
+              <div class="mb-2">
+                <label>Status</label>
+                <select id="pStatus" class="form-select" required>
+                  <option value="In Stock">In Stock</option>
+                  <option value="Hot">Hot</option>
+                  <option value="Out of Stock">Out of Stock</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label>Upload Image</label>
+                <input type="file" id="pImage" class="form-control" accept="image/*" required>
+              </div>
+              <button type="submit" class="btn btn-yellow w-100 rounded" id="btnSave">Save Product</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Product List -->
+        <div class="col-md-8">
+          <div class="card bg-dark text-white border-secondary p-3" style="min-height: 500px; overflow-x: auto;">
+            <h4 class="text-yellow title-font mb-3">Product List</h4>
+            <table class="table table-dark table-hover admin-table align-middle">
+              <thead>
+                <tr>
+                  <th>Image</th><th>Name</th><th>Category</th><th>Scale</th><th>Brand</th><th>Price</th><th>Status</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminProductTable">
+                <tr><td colspan="8" class="text-center py-3">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // ===================================================================
+    // *** วาง URL ของ Web App (ที่ลงท้ายด้วย /exec) ไว้ตรงนี้ ***
+    // ===================================================================
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyeBS7kjlAcTEENicb9PYVockZDytdfiNHT47prUtFIp6zHswPJhl5sej6q2BT4pkfv7w/exec';
+
+    const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#999" font-family="sans-serif" font-size="16" text-anchor="middle" dominant-baseline="middle">No Image</text></svg>'
+    );
+
+    let globalProducts = [];
+    let currentCategoryFilter = '';
+    let adminToken = null;
+
+    // ---------------- ตัวช่วยเรียก API ----------------
+    async function apiGet(action) {
+      const res = await fetch(API_URL + '?action=' + encodeURIComponent(action));
+      return res.json();
+    }
+
+    async function apiPost(payload) {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        // ใช้ text/plain เพื่อเลี่ยง CORS preflight ของ Apps Script
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      return res.json();
+    }
+
+    function escapeHtml(value) {
+      return String(value === undefined || value === null ? '' : value)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function statusBadgeClass(status) {
+      return status === 'Hot' ? 'bg-danger' : (status === 'In Stock' ? 'bg-success' : 'bg-secondary');
+    }
+
+    function handleAuthError(res) {
+      if (res && res.code === 'AUTH') {
+        alert(res.message);
+        logout();
+        return true;
+      }
+      return false;
+    }
+
+    // ---------------- หน้าเว็บลูกค้า (Frontend) ----------------
+    document.addEventListener('DOMContentLoaded', () => {
+      loadProducts();
+
+      document.getElementById('productGrid').addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn-add');
+        if (!btn) return;
+        const p = globalProducts.find(x => x.id === btn.dataset.id);
+        if (p) alert('Added ' + p.ProductName + ' to cart!');
+      });
+
+      document.getElementById('adminProductTable').addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn-delete');
+        if (btn) deleteProduct(btn.dataset.id);
+      });
+    });
+
+    async function loadProducts() {
+      try {
+        const res = await apiGet('getProducts');
+        if (!res.success) throw new Error(res.message);
+        globalProducts = res.products || [];
+        filterProducts();
+        renderAdminTable(globalProducts);
+      } catch (err) {
+        document.getElementById('productGrid').innerHTML =
+          '<div class="col-12 text-center py-5 text-danger">โหลดข้อมูลสินค้าไม่สำเร็จ: ' + escapeHtml(err.message) + '</div>';
+      }
+    }
+
+    function setFilterCategory(cat) {
+      currentCategoryFilter = (currentCategoryFilter === cat) ? '' : cat; // Toggle
+      document.querySelectorAll('.cat-box, .cat-tile').forEach(el => {
+        el.classList.toggle('active', el.dataset.cat === currentCategoryFilter);
+      });
+      filterProducts();
+    }
+
+    function filterProducts() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const scale = document.getElementById('filterScale').value;
+      const brand = document.getElementById('filterBrand').value;
+
+      const filtered = globalProducts.filter(p => {
+        const matchSearch = String(p.ProductName || '').toLowerCase().includes(search);
+        const matchScale = scale ? p.Scale === scale : true;
+        const matchBrand = brand ? p.Brand === brand : true;
+        const matchCat = currentCategoryFilter ? p.Category === currentCategoryFilter : true;
+        return matchSearch && matchScale && matchBrand && matchCat;
+      });
+
+      const grid = document.getElementById('productGrid');
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="col-12 text-center py-5 text-muted">No products found.</div>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => {
+        const soldOut = p.Status === 'Out of Stock';
+        const dot = p.Status === 'Hot' ? '#ef4444' : (p.Status === 'In Stock' ? '#22c55e' : '#9ca3af');
+        return `
+          <div class="col">
+            <div class="pcard h-100">
+              <div class="pcard-img">
+                <span class="pcard-status"><span class="pcard-dot" style="background:${dot}"></span>${escapeHtml(p.Status)}</span>
+                <span class="pcard-brand">${escapeHtml(p.Brand)}</span>
+                <img src="${escapeHtml(p.ImageUrl || PLACEHOLDER_IMG)}" alt="${escapeHtml(p.ProductName)}" loading="lazy"
+                     onerror="this.onerror=null;this.src=PLACEHOLDER_IMG">
+              </div>
+              <div class="pcard-body">
+                <div class="pcard-scale">${escapeHtml(p.Scale)} Scale</div>
+                <div class="pcard-name" title="${escapeHtml(p.ProductName)}">${escapeHtml(p.ProductName)}</div>
+                <div class="pcard-price">฿${Number(p.Price).toLocaleString()}</div>
+                <button class="pcard-cart btn-add" data-id="${escapeHtml(p.id)}" ${soldOut ? 'disabled' : ''}>
+                  <i class="fas fa-cart-shopping"></i> ${soldOut ? 'Out of Stock' : 'Add to Cart'}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ---------------- ระบบหลังบ้าน (Backend) ----------------
+    const loginModal = new bootstrap.Modal(document.getElementById('loginModal'), { keyboard: false });
+
+    function showLoginModal() {
+      loginModal.show();
+    }
+
+    async function login() {
+      const btn = document.getElementById('btnLogin');
+      const u = document.getElementById('adminUser').value;
+      const p = document.getElementById('adminPass').value;
+      btn.disabled = true;
+      btn.innerText = 'Checking...';
+      try {
+        const res = await apiPost({ action: 'login', username: u, password: p });
+        if (res.success) {
+          adminToken = res.token;
+          loginModal.hide();
+          document.getElementById('adminPass').value = '';
+          document.getElementById('frontend-section').style.display = 'none';
+          document.getElementById('backend-section').style.display = 'block';
+          loadProducts();
+        } else {
+          alert(res.message || 'เข้าสู่ระบบไม่สำเร็จ');
+        }
+      } catch (err) {
+        alert('เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Login';
+      }
+    }
+
+    function logout() {
+      if (adminToken) {
+        apiPost({ action: 'logout', token: adminToken }).catch(() => {});
+      }
+      adminToken = null;
+      document.getElementById('frontend-section').style.display = 'block';
+      document.getElementById('backend-section').style.display = 'none';
+      document.getElementById('adminUser').value = '';
+      document.getElementById('adminPass').value = '';
+    }
+
+    // ย่อรูปก่อนอัปโหลด (กว้างสุด 900px) เพื่อให้เร็วและประหยัดพื้นที่
+    function resizeImage(file, maxSize = 900) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('อ่านไฟล์รูปไม่สำเร็จ'));
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onerror = () => reject(new Error('ไฟล์รูปไม่ถูกต้อง'));
+          img.onload = () => {
+            const ratio = Math.min(1, maxSize / Math.max(img.width, img.height));
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.round(img.width * ratio);
+            canvas.height = Math.round(img.height * ratio);
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL('image/jpeg', 0.85));
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function submitProduct() {
+      const btn = document.getElementById('btnSave');
+      const file = document.getElementById('pImage').files[0];
+      if (!file) { alert('กรุณาเลือกรูปสินค้า'); return; }
+
+      btn.innerText = 'Uploading & Saving...';
+      btn.disabled = true;
+
+      try {
+        const base64Data = await resizeImage(file);
+        const fileName = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+        const res = await apiPost({
+          action: 'addProduct',
+          token: adminToken,
+          fileName: fileName,
+          image: base64Data,
+          product: {
+            ProductName: document.getElementById('pName').value,
+            Category: document.getElementById('pCategory').value,
+            Scale: document.getElementById('pScale').value,
+            Brand: document.getElementById('pBrand').value,
+            Price: document.getElementById('pPrice').value,
+            Status: document.getElementById('pStatus').value
+          }
+        });
+        if (handleAuthError(res)) return;
+        if (!res.success) throw new Error(res.message);
+        alert('เพิ่มสินค้าเรียบร้อย!');
+        document.getElementById('productForm').reset();
+        loadProducts();
+      } catch (err) {
+        alert('บันทึกไม่สำเร็จ: ' + err.message);
+      } finally {
+        btn.innerText = 'Save Product';
+        btn.disabled = false;
+      }
+    }
+
+    function renderAdminTable(products) {
+      const tbody = document.getElementById('adminProductTable');
+      if (!products.length) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center py-3 text-muted">ยังไม่มีสินค้า</td></tr>';
+        return;
+      }
+      tbody.innerHTML = products.map(p => `
+        <tr>
+          <td><img src="${escapeHtml(p.ImageUrl || PLACEHOLDER_IMG)}" width="50" height="50" style="object-fit:cover; border-radius:5px; background:white;" onerror="this.onerror=null;this.src=PLACEHOLDER_IMG"></td>
+          <td>${escapeHtml(p.ProductName)}</td>
+          <td>${escapeHtml(p.Category)}</td>
+          <td>${escapeHtml(p.Scale)}</td>
+          <td>${escapeHtml(p.Brand)}</td>
+          <td>฿${Number(p.Price).toLocaleString()}</td>
+          <td><span class="badge ${statusBadgeClass(p.Status)}">${escapeHtml(p.Status)}</span></td>
+          <td><button class="btn btn-sm btn-danger rounded btn-delete" data-id="${escapeHtml(p.id)}"><i class="fas fa-trash"></i></button></td>
+        </tr>
+      `).join('');
+    }
+
+    async function deleteProduct(id) {
+      if (!confirm('ต้องการลบสินค้านี้ใช่หรือไม่?')) return;
+      try {
+        const res = await apiPost({ action: 'deleteProduct', token: adminToken, id: id });
+        if (handleAuthError(res)) return;
+        if (!res.success) throw new Error(res.message);
+        loadProducts();
+      } catch (err) {
+        alert('ลบไม่สำเร็จ: ' + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
