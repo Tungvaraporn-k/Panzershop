@@ -8,7 +8,7 @@ A catalog website for a scale-model shop (tanks, aircraft, warships, cars, figur
 
 | Storefront | Category filter | Admin panel |
 |---|---|---|
-| ![Storefront](screenshots/store.png) | ![Filter](screenshots/filter.png) | ![Admin](screenshots/admin.png) |
+| ![Storefront](screenshots/Screenshot%202026-11-22%20163745.png) | ![Filter](screenshots/Screenshot%202026-11-22%20163804.png) | ![Admin](screenshots/Screenshot%202026-11-22%20163835.png) |
 
 ## Features
 
