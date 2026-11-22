@@ -1,0 +1,7 @@
+# Files that stay on GitHub but are NOT published on the live website
+.git
+.assetsignore
+wrangler.jsonc
+README.md
+apps-script
+screenshots
